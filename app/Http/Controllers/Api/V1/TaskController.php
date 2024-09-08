@@ -22,7 +22,10 @@ class TaskController extends Controller
     public function index(Request $request) : JsonResponse
     {
         try {
-            //code...
+            //cache...
+            if($request->has('page')){
+                Cache::forget('tasks');
+            }
             $tasks = Cache::remember('tasks', 60, function () {
                 return Task::with('user')->paginate(10);
             });
@@ -52,11 +55,12 @@ class TaskController extends Controller
                 'startDate' => 'required|date',
                 'endDate' => 'required|date|after:start_date',
             ]);
-                //sayfalamaya dikkat et
+
             if ($validator->fails()) {
-                dd($validator->errors()); // Validasyon hatalarını burda dökebiliriz
+                return response()->json(['errors' => $validator->errors()], 422);
+               // return validation error
             }
-            //$task = $request->user()->tasks()->create($request->all());
+
             $task = new Task();
             $task->user_id = $request->assignedTo;
             $task->title = $request->title;

@@ -82,7 +82,10 @@ const KanbanBoard = (props) => {
                             ...provided.draggableProps.style,
                           }}
                         >
+                            <p>{task.user ?  task.user.name : 'null'}</p>
                           <p>{task.content || task.description}</p>
+                          <p>Start Date:<small>{ task.start_date}</small></p>
+                          <p>End Date:<small>{ task.end_date}</small></p>
                         </div>
                       )}
                     </Draggable>

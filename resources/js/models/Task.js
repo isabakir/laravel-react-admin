@@ -67,7 +67,7 @@ export  default class Task {
      * @return {object}
      */
     static async update(id, attributes) {
-        const response = await axios.patch(`/api/v1/tasks/${id}`, attributes);
+        const response = await axios.put(`/api/v1/tasks/${id}`, attributes);
 
         if (response.status !== 200) {
             return {};

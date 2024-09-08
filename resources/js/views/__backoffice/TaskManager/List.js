@@ -182,8 +182,8 @@ const List = (props) => {
          Add New Task
         </Button>
       </div>
-      <div>
-        <Kanban taskList={tasks}/>
+      <div style={{width:'100%', marginTop:'25px'}}>
+        <Kanban taskList={tasks.length>0?tasks:[]}/>
       </div>
     </MasterLayout>
   );
