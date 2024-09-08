@@ -491,7 +491,8 @@ function List(props) {
             pageTitle={Lang.get('navigation.users')}
             primaryAction={primaryAction}
             tabs={tabs}
-            loading={loading}
+            //why loading is used twice?
+         //   loading={loading}
             message={message}
             alert={alert}
         >

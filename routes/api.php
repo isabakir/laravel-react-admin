@@ -1,5 +1,9 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
+
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -37,6 +41,20 @@ Route::namespace('Api')->name('api.')->group(function () {
                     Route::patch('password', 'AccountController@updatePassword')->name('password');
                     Route::patch('credentials', 'AccountController@updateCredentials')->name('credentials');
                 });
+            });
+
+            //task
+            Route::resource('tasks', 'TaskController', ['except' => ['edit', 'create']]);
+            Route::prefix('tasks')->name('tasks.')->group(function () {
+            //get tasks
+                Route::get("/", "TaskController@index")->name("index");
+                //show task
+                Route::get("/{task}", "TaskController@show")->name("show");
+                //update task
+                Route::patch("/{task}", "TaskController@update")->name("update");
+                //delete task
+                Route::delete("/{task}", "TaskController@destroy")->name("destroy");
+              Route::post("/", "TaskController@store")->name("store");
             });
 
             Route::resource('users', 'UsersController', ['except' => ['edit', 'create']]);

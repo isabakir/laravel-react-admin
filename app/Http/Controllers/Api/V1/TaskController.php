@@ -1,0 +1,154 @@
+<?php
+
+namespace App\Http\Controllers\Api\V1;
+
+use App\Task;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
+
+class TaskController extends Controller
+{
+    /**List a tasks
+     *
+     * @param Illuminate\Http\Request $request
+     *
+     * @return Illuminate\Http\JsonResponse
+     */
+    public function index(Request $request) : JsonResponse
+    {
+        try {
+            //code...
+            $tasks = Task::with('user')->paginate(10);
+            return response()->json($tasks, 200);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['message' => $th->getMessage()], 500);
+        }
+
+    }
+
+    /**
+     * Store a task
+     *
+     * @param Illuminate\Http\Request $request
+     *
+     * @return Illuminate\Http\JsonResponse
+     */
+    public function store(Request $request) : JsonResponse
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                "assignedTo" => 'required|exists:users,id',
+                'title' => 'required|string',
+                'description' => 'required|string',
+                'startDate' => 'required|date',
+                'endDate' => 'required|date|after:start_date',
+            ]);
+                //sayfalamaya dikkat et
+            if ($validator->fails()) {
+                dd($validator->errors()); // Validasyon hatalarını burda dökebiliriz
+            }
+            //$task = $request->user()->tasks()->create($request->all());
+            $task = new Task();
+            $task->user_id = $request->assignedTo;
+            $task->title = $request->title;
+            $task->description = $request->description;
+            $task->start_date = $request->startDate;
+            $task->end_date = $request->endDate;
+            $task->status = 'pending';
+            $task->save();
+
+            return response()->json(['data'=>$task, 'message' => 'Task created successfully','status'=>'201'], 201);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => $th->getMessage()], 500);
+        }
+
+    }
+
+    /**
+     * Show a task
+     *
+     * @param Illuminate\Http\Request $request
+     * @param App\Task $task
+     *
+     * @return Illuminate\Http\JsonResponse
+     */
+    public function show(Request $request, Task $task) : JsonResponse
+    {
+        try {
+            //code..
+            $task = Task::with('user')->find($task->id);
+
+            return response()->json($task, 200);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['message' => $th->getMessage()], 500);
+        }
+
+    }
+
+    /**
+     * Update a task
+     *
+     * @param Illuminate\Http\Request $request
+     * @param App\Task $task
+     *
+     * @return Illuminate\Http\JsonResponse
+     */
+    public function update(Request $request, Task $task) : JsonResponse
+    {
+        try {
+            //code...
+            $validator = Validator::make($request->all(), [
+                "assignedTo" => 'required|exists:users,id',
+                'title' => 'required|string',
+                'description' => 'required|string',
+                'startDate' => 'required|date',
+                'endDate' => 'required|date|after:start_date',
+                'status' => 'required|string',
+            ]);
+
+            if ($validator->fails()) {
+                dd($validator->errors()); // Validasyon hatalarını burda dökebiliriz
+            }
+
+            $task->user_id = $request->assignedTo;
+            $task->title = $request->title;
+            $task->description = $request->description;
+            $task->start_date = $request->startDate;
+            $task->end_date = $request->endDate;
+            $task->status = $request->status;
+            $task->save();
+
+            return response()->json(['data'=>$task, 'message' => 'Task updated successfully','status'=>'200'], 200);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['message' => $th->getMessage()], 500);
+        }
+
+    }
+    /**
+     * Delete a task
+     *
+     * @param Illuminate\Http\Request $request
+     * @param App\Task $task
+     *
+     * @return Illuminate\Http\JsonResponse
+     */
+    public function destroy(Request $request, Task $task) : JsonResponse
+    {
+        try {
+            //code...
+            $task->delete();
+
+            return response()->json(['message' => 'Task deleted successfully','status'=>'200'], 200);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['message' => $th->getMessage()], 500);
+        }
+
+    }
+
+}

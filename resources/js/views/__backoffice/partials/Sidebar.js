@@ -114,6 +114,24 @@ function Sidebar(props) {
                 },
             ],
         },
+        //task manager
+        {
+            name: 'Task Manager',
+            id: 'taskManager',
+            links: [
+                {
+                    name: 'Task Manager',
+                    icon: <ShowChartIcon />,
+                    path: NavigationUtils.route('backoffice.taskManager.index'),
+                },
+                {
+                    name: 'Create Task',
+                    icon: <ShowChartIcon />,
+                    path: NavigationUtils.route('backoffice.taskManager.create'),
+                },
+
+            ],
+        },
     ];
 
     useEffect(() => {
