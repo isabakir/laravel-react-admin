@@ -5,6 +5,7 @@ import * as NavigationUtils from '../../../helpers/Navigation';
 import Task from '../../../models/Task';
 import { withStyles } from '@material-ui/core/styles';
 import { Table, TableBody, TableCell, TableHead, TableRow, Paper, Button, Typography, TablePagination } from '@material-ui/core';
+import { Kanban } from './Kanban';
 
 const styles = theme => ({
   root: {
@@ -180,6 +181,9 @@ const List = (props) => {
         >
          Add New Task
         </Button>
+      </div>
+      <div>
+        <Kanban taskList={tasks}/>
       </div>
     </MasterLayout>
   );

@@ -17,7 +17,7 @@ import { User } from '../../../models';
 import { LinearIndeterminate } from '../../../ui/Loaders';
 import { Master as MasterLayout } from '../layouts';
 
-import { Profile, Account, Avatar } from './Forms';
+import { Profile, Account, Avatar } from './Kanban';
 import { DatePicker,MuiPickersUtilsProvider } from 'material-ui-pickers';
 import MomentUtils from '@date-io/moment';
 import Task from '../../../models/Task';
